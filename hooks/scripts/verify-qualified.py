@@ -35,6 +35,11 @@ def main() -> None:
     except Exception:
         payload = {}
 
+    cmd = (payload.get("tool_input") or {}).get("command", "")
+    if "hubspot_upsert.py" not in cmd:
+        allow()
+        return
+
     leads_file = find_leads_file()
     if leads_file is None:
         # Can't find the file — allow and let the script error naturally.

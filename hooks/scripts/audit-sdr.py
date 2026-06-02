@@ -35,6 +35,11 @@ def main() -> None:
 
     # Extract the relevant target from whichever tool fired.
     cmd = tool_input.get("command", "")
+
+    is_hubspot_cmd = "hubspot_upsert.py" in cmd or "ensure_hubspot_setup.py" in cmd
+    is_gmail = "gmail" in tool_name.lower()
+    if not is_hubspot_cmd and not is_gmail:
+        sys.exit(0)
     if "gmail" in tool_name.lower():
         target = tool_input.get("to", "") or tool_input.get("recipient", "")
         subject = tool_input.get("subject", "")
