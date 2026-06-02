@@ -19,6 +19,9 @@ import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).parent))
+from _config import resolve_token  # noqa: E402
+
 HUBSPOT_API = "https://api.hubapi.com"
 SCRIPT_DIR = Path(__file__).parent
 CONFIG_PATH = SCRIPT_DIR.parent / "references" / "custom-properties.json"
@@ -110,13 +113,13 @@ def main():
     args = parse_args()
     marker_path = Path(args.marker)
 
-    token = os.environ.get("HUBSPOT_PRIVATE_APP_TOKEN", "")
+    token = resolve_token()
     if not token:
         print(json.dumps({
             "token_present": False,
             "mode": "dry-run",
-            "message": "HUBSPOT_PRIVATE_APP_TOKEN not set — ingest will run in dry-run mode. "
-                       "Set the token and re-run to provision custom properties.",
+            "message": "No HubSpot token found — run /setup-hubspot to add one. "
+                       "Ingest will run in dry-run mode until then.",
         }))
         sys.exit(0)
 
@@ -126,7 +129,7 @@ def main():
             "token_present": True,
             "token_valid": False,
             "error": account_info,
-            "message": "Token validation failed — check your HUBSPOT_PRIVATE_APP_TOKEN.",
+            "message": "HubSpot rejected the token — run /setup-hubspot to re-enter it.",
         }))
         sys.exit(0)
 

@@ -47,10 +47,15 @@ runs in dry-run mode and prints the payload without calling HubSpot.
 
 ### 2. Install the plugin
 
+Install straight from GitHub — no need to clone the repo first:
+
 ```
-claude plugin marketplace add /path/to/SDR-plugin
+claude plugin marketplace add ManishKatheeth/SDR-plugin
 claude plugin install sdr-plugin@sdr-tools
 ```
+
+> Prefer the in-app flow? Run `/plugin marketplace add ManishKatheeth/SDR-plugin`
+> inside Claude Code, then `/plugin` → **Discover** → install **sdr-plugin**.
 
 That's it. The plugin auto-creates all required custom HubSpot properties the
 first time `/ingest-leads` runs — no manual portal configuration needed.

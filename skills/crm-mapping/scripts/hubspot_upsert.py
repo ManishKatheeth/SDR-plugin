@@ -11,11 +11,14 @@ Exits 0 always; result is printed as JSON to stdout.
 """
 import argparse
 import json
-import os
 import sys
 import urllib.error
 import urllib.request
 from datetime import datetime, timezone
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).parent))
+from _config import resolve_token  # noqa: E402
 
 HUBSPOT_API = "https://api.hubapi.com"
 
@@ -97,11 +100,11 @@ def parse_args():
 
 def main():
     args = parse_args()
-    token = os.environ.get("HUBSPOT_PRIVATE_APP_TOKEN", "")
+    token = resolve_token()
     dry_run = args.dry_run or not token
 
     if not token and not args.dry_run:
-        print(json.dumps({"warning": "HUBSPOT_PRIVATE_APP_TOKEN not set — running in dry-run mode"}))
+        print(json.dumps({"warning": "No HubSpot token found — run /setup-hubspot. Running in dry-run mode."}))
 
     try:
         contact = json.loads(args.contact)
