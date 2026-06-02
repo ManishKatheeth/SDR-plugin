@@ -9,6 +9,7 @@ an audit trail.
 
 | Component | What it does |
 |---|---|
+| `sdr-orchestrator` skill | Central entry point: onboarding/setup guide, version-update guidance, and "plays" that route any SDR goal to the right command, sub-skill, and reference files. Start here. |
 | `/find-leads <ICP or csv:path>` | Sources leads from Clay MCP, web scraping, or CSV; scores them against the ICP; writes `qualified-leads.json`. |
 | `/ingest-leads <file>` | Normalises, de-dupes, and upserts qualified leads into HubSpot via REST API. Dry-runs if no token is set. |
 | `/send-cold-email <email>` | Drafts a personalised, compliance-checked cold email and creates a Gmail draft for human review. |
@@ -22,7 +23,8 @@ an audit trail.
 | CRM confirmation hook | `PreToolUse` — asks for approval before every HubSpot write. |
 | Qualification gate hook | `PreToolUse` — denies ingest if no qualified leads are present. |
 | Email confirmation hook | `PreToolUse` — asks for approval before every Gmail draft. |
-| Audit hook | `PostToolUse` — appends every CRM write and email draft to an audit log. |
+| Audit hook | `PostToolUse` — appends every CRM write, email draft, and setup run to an audit log. |
+| Version-check hook | `SessionStart` — compares the installed version against GitHub once per session and nudges you if a newer version is available. |
 
 ## Prerequisites
 
@@ -67,6 +69,12 @@ python3 skills/crm-mapping/scripts/ensure_hubspot_setup.py --force
 
 To add more custom properties, edit
 `skills/crm-mapping/references/custom-properties.json` and run with `--force`.
+
+## Getting started
+
+Not sure where to begin? Just ask Claude **"how do I set up the SDR plugin"** or
+**"what can this plugin do"** — the `sdr-orchestrator` skill walks you through keys,
+setup, and which command to use for each goal.
 
 ## Usage
 
