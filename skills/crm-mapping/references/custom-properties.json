@@ -1,0 +1,34 @@
+[
+  {
+    "objectType": "contacts",
+    "name": "lead_score",
+    "label": "Lead Score",
+    "type": "number",
+    "fieldType": "number",
+    "groupName": "contactinformation"
+  },
+  {
+    "objectType": "contacts",
+    "name": "lead_qualification_reason",
+    "label": "Lead Qualification Reason",
+    "type": "string",
+    "fieldType": "text",
+    "groupName": "contactinformation"
+  },
+  {
+    "objectType": "companies",
+    "name": "hs_funding_stage",
+    "label": "Funding Stage",
+    "type": "string",
+    "fieldType": "text",
+    "groupName": "companyinformation"
+  },
+  {
+    "objectType": "companies",
+    "name": "recent_funding_round",
+    "label": "Recent Funding Round",
+    "type": "bool",
+    "fieldType": "booleancheckbox",
+    "groupName": "companyinformation"
+  }
+]

@@ -34,13 +34,17 @@ def main() -> None:
     tool_input = payload.get("tool_input") or {}
 
     # Extract the relevant target from whichever tool fired.
+    cmd = tool_input.get("command", "")
     if "gmail" in tool_name.lower():
         target = tool_input.get("to", "") or tool_input.get("recipient", "")
         subject = tool_input.get("subject", "")
         action_type = "gmail_draft"
+    elif "ensure_hubspot_setup" in cmd:
+        target = ""
+        subject = ""
+        action_type = "hubspot_setup"
     else:
         # HubSpot upsert — extract contact email from the --contact arg.
-        cmd = tool_input.get("command", "")
         import re
         m = re.search(r'"email"\s*:\s*"([^"]+)"', cmd)
         target = m.group(1) if m else ""

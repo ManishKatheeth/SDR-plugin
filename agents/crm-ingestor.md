@@ -19,7 +19,16 @@ You take a `qualified-leads.json` file and upsert the leads into HubSpot. You
 
 ## Workflow
 
-1. **Load the mapping rules — fresh every run.** Re-read these files from disk
+1. **Bootstrap: verify token + provision custom properties.** Run before anything else:
+   ```
+   python3 "${CLAUDE_PLUGIN_ROOT}/skills/crm-mapping/scripts/ensure_hubspot_setup.py"
+   ```
+   - If it reports `token_present: false` → continue in dry-run mode (no upsert calls).
+   - If it reports `token_valid: false` → abort and tell the user their token is invalid.
+   - If it reports `status: provisioned` or `already-provisioned` → proceed normally.
+   This is a no-op on subsequent runs once the marker file exists.
+
+2. **Load the mapping rules — fresh every run.** Re-read these files from disk
    before processing anything:
    - `${CLAUDE_PLUGIN_ROOT}/skills/crm-mapping/SKILL.md`
    - `${CLAUDE_PLUGIN_ROOT}/skills/crm-mapping/references/hubspot-field-map.md`

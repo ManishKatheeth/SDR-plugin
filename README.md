@@ -43,20 +43,30 @@ export HUBSPOT_PRIVATE_APP_TOKEN=pat-na1-...
 Add it to your shell profile or a `.env` file. Without it, `/ingest-leads`
 runs in dry-run mode and prints the payload without calling HubSpot.
 
-### 2. Create custom HubSpot properties
-
-Before running a live ingest, create these custom properties in your HubSpot
-portal (Settings → Properties):
-
-- **Contact:** `lead_score` (number), `lead_qualification_reason` (single-line text)
-- **Company:** `hs_funding_stage` (single-line text), `recent_funding_round` (checkbox)
-
-### 3. Install the plugin
+### 2. Install the plugin
 
 ```
 claude plugin marketplace add /path/to/SDR-plugin
 claude plugin install sdr-plugin@sdr-tools
 ```
+
+That's it. The plugin auto-creates all required custom HubSpot properties the
+first time `/ingest-leads` runs — no manual portal configuration needed.
+
+The required properties (created once, idempotent) are:
+- **Contact:** `lead_score` (number), `lead_qualification_reason` (single-line text)
+- **Company:** `hs_funding_stage` (single-line text), `recent_funding_round` (checkbox)
+
+After the first successful provision, a marker file
+(`~/.claude/sdr-plugin-setup.json`) caches the result so no extra API calls are
+made on subsequent runs. Pass `--force` to re-provision manually:
+
+```bash
+python3 skills/crm-mapping/scripts/ensure_hubspot_setup.py --force
+```
+
+To add more custom properties, edit
+`skills/crm-mapping/references/custom-properties.json` and run with `--force`.
 
 ## Usage
 

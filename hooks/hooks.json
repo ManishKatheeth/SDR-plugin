@@ -37,6 +37,16 @@
         ]
       },
       {
+        "matcher": "Bash",
+        "if": "Bash(*ensure_hubspot_setup.py*)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/hooks/scripts/audit-sdr.py\""
+          }
+        ]
+      },
+      {
         "matcher": "mcp__claude_ai_Gmail__create_draft",
         "hooks": [
           {

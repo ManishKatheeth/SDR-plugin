@@ -24,6 +24,29 @@ version:
 - `references/hubspot-field-map.md`
 - `references/dedupe-policy.md`
 
+## First-run environment setup
+
+Before normalization, run the bootstrap check once per HubSpot portal:
+
+```bash
+python3 "${CLAUDE_PLUGIN_ROOT}/skills/crm-mapping/scripts/ensure_hubspot_setup.py"
+```
+
+This script:
+1. Checks that `HUBSPOT_PRIVATE_APP_TOKEN` is set — if not, reports `token_present: false`
+   and the ingest continues in dry-run mode.
+2. Validates the token with a lightweight `GET /account-info/v3/details` call.
+3. Reads `references/custom-properties.json` (the canonical list of required custom
+   properties) and creates any that don't yet exist in the portal.
+4. Writes a marker file (`~/.claude/sdr-plugin-setup.json`, keyed by `portalId`)
+   so subsequent runs skip all provisioning API calls — pass `--force` to re-check.
+
+If the token is absent the ingest still proceeds in dry-run mode (no HubSpot writes),
+consistent with existing behavior.
+
+The required custom properties are defined in `references/custom-properties.json`.
+Edit that file to add or change properties — no code changes required.
+
 ## Normalization
 
 1. Load `references/hubspot-field-map.md` to understand which lead fields map to

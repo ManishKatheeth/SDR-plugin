@@ -15,9 +15,15 @@ is upserted without explicit approval.
    and stop. If the file exists but contains no leads marked `qualified: true`,
    abort with: "No qualified leads found in $1 — run /find-leads first."
 
-2. **Check for HUBSPOT_PRIVATE_APP_TOKEN.** If the environment variable is unset,
-   warn the user and run in `--dry-run` mode (normalizes and de-dupes but prints the
-   payload without sending it to HubSpot).
+2. **Bootstrap environment check.** Run:
+   ```bash
+   python3 "${CLAUDE_PLUGIN_ROOT}/skills/crm-mapping/scripts/ensure_hubspot_setup.py"
+   ```
+   This verifies the token and auto-creates any missing custom HubSpot properties:
+   - `token_present: false` → warn the user and continue in dry-run mode.
+   - `token_valid: false` → abort with: "HubSpot token is invalid — update HUBSPOT_PRIVATE_APP_TOKEN and retry."
+   - `status: provisioned` or `already-provisioned` → proceed.
+   After the first successful run the result is cached in `~/.claude/sdr-plugin-setup.json`; no API calls on subsequent runs.
 
 3. **Delegate to `crm-ingestor`.** Pass the file path. The agent will:
    - Re-read `skills/crm-mapping/references/` fresh before mapping.
