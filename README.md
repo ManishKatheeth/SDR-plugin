@@ -20,6 +20,8 @@ an audit trail.
 | `cold-emailer` agent | Writes and validates email drafts. Creates Gmail drafts. Never sends. |
 | `lead-qualification` skill | ICP scoring rubric (freshness-checked). Editable references: ICP definition, scoring rubric, disqualifiers. |
 | `crm-mapping` skill | HubSpot field mapping + de-dupe policy (freshness-checked). Scripts: normalize_leads.py, hubspot_upsert.py. |
+| HubSpot setup UI | `skills/crm-mapping/scripts/setup_ui.py` — secure local web form for pasting your token (served on 127.0.0.1, token never logged). Alternative to `export`. |
+| Onboarding preflight | `skills/sdr-orchestrator/scripts/onboarding_check.py` — verifies all System-Layer files are present and surfaces missing credentials/MCP connections as JSON. Runs automatically on first use. |
 | `cold-email-writing` skill | Template + tone guide + CAN-SPAM/GDPR rules (freshness-checked). Script: validate_email.py. |
 | CRM confirmation hook | `PreToolUse` — asks for approval before every HubSpot write. |
 | Qualification gate hook | `PreToolUse` — denies ingest if no qualified leads are present. |
@@ -45,6 +47,17 @@ export HUBSPOT_PRIVATE_APP_TOKEN=pat-na1-...
 
 Add it to your shell profile or a `.env` file. Without it, `/ingest-leads`
 runs in dry-run mode and prints the payload without calling HubSpot.
+
+**Prefer a guided form?** The setup UI serves a masked input on localhost — the
+token is never exposed as a shell argument or written to any log:
+
+```bash
+python3 skills/crm-mapping/scripts/setup_ui.py
+```
+
+It opens a browser tab on `http://127.0.0.1:<port>`, saves the token to
+`~/.claude/sdr-plugin-config.json` (mode 600), and immediately verifies and
+provisions the required HubSpot properties.
 
 ### 2. Install the plugin
 
@@ -149,6 +162,25 @@ JSON object:
 ```
 
 Default location: `~/.claude/sdr-plugin-audit.jsonl`
+
+## Troubleshooting
+
+Run the onboarding preflight at any time to check plugin health:
+
+```bash
+python3 skills/sdr-orchestrator/scripts/onboarding_check.py
+```
+
+It prints a JSON object with four keys:
+
+| Key | Meaning |
+|---|---|
+| `ready` | `true` if all System-Layer files are present. `false` = plugin can't run; restore missing files first. |
+| `missing_system_files` | List of absent required files (empty when `ready: true`). |
+| `token` | `{ "present": bool, "valid": bool }` — missing token is a warning only; ingest falls back to dry-run. |
+| `manual_confirm` | MCP servers (Clay, Gmail) that need to be manually verified as connected. |
+
+The `sdr-orchestrator` skill runs this automatically on first use.
 
 ## Version
 
