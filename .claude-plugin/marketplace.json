@@ -1,0 +1,17 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "sdr-tools",
+  "description": "Internal SDR tooling for Claude Code — lead sourcing, CRM ingestion, and cold-email drafting.",
+  "owner": {
+    "name": "Manish Katheeth",
+    "email": "mkatheeth@gmail.com"
+  },
+  "plugins": [
+    {
+      "name": "sdr-plugin",
+      "description": "Automate the SDR outbound pipeline: find and qualify leads (Clay MCP + web + CSV), ingest them into HubSpot via REST API, and draft personalised cold emails for human review — with confirmation gates and an audit trail at every irreversible step.",
+      "category": "productivity",
+      "source": "./"
+    }
+  ]
+}

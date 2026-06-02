@@ -1,0 +1,23 @@
+{
+  "skill_name": "cold-email-writing",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Draft a cold email for: Sarah Chen, VP of Sales at Acme Sales Co (acmesales.com), SalesTech SaaS, 120 employees, Series B raised 3 months ago, 5 open SDR roles. Email: sarah.chen@acmesales.com.",
+      "expected_output": "Email ≤ 150 words body. Subject ≤ 60 chars. Opening line references recent Series B or 5 open SDR roles (real signal). One CTA. Contains opt-out text. Compliance PASS. Template 'Recent Funding' or 'Scaling Sales Team' used.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Draft a cold email for: James Rodriguez, Co-Founder at GrowthBase (growthbase.io), MarTech, 45 employees, Seed stage. No recent signals available. Email: james@growthbase.io.",
+      "expected_output": "Falls back to Generic Segment template since no specific signal. Subject ≤ 60 chars. Opening does NOT fabricate a signal — uses segment opener. Body ≤ 150 words. One CTA. Contains opt-out. Compliance PASS.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "Validate this email for compliance: Subject='FREE LEADS GUARANTEED!!!', Body='Act now for free guaranteed leads — this limited time offer expires soon! Click here to buy now. Winner winner!'",
+      "expected_output": "Compliance FAIL. Issues: subject too long or contains spam triggers, body contains multiple spam trigger words (free, guaranteed, act now, limited time, click here, buy now), missing opt-out, all-caps in subject, exclamation marks.",
+      "files": []
+    }
+  ]
+}

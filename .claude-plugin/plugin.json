@@ -1,0 +1,11 @@
+{
+  "name": "sdr-plugin",
+  "version": "0.1.0",
+  "description": "Automate the SDR outbound pipeline: find and qualify leads (Clay MCP + web + CSV), ingest them into HubSpot via REST API, and draft personalised cold emails for human review — with confirmation gates and an audit trail at every irreversible step.",
+  "author": {
+    "name": "Manish Katheeth",
+    "email": "mkatheeth@gmail.com"
+  },
+  "keywords": ["sdr", "sales", "leads", "hubspot", "cold-email", "outreach", "clay", "prospecting"],
+  "hooks": "./hooks/hooks.json"
+}

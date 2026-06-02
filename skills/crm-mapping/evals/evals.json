@@ -1,0 +1,23 @@
+{
+  "skill_name": "crm-mapping",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Map this qualified lead to HubSpot properties: company='Acme Sales Co', domain='acmesales.com', industry='SalesTech SaaS', employee_count=120, funding_stage='Series B', country='US'. Contact: name='Sarah Chen', title='VP of Sales', email='sarah.chen@acmesales.com'. Score=82, qualified=true.",
+      "expected_output": "Contact properties: email=sarah.chen@acmesales.com, firstname=Sarah, lastname=Chen, jobtitle='VP of Sales', lead_score=82, lifecyclestage=lead, lead_source=sdr-plugin. Company properties: name='Acme Sales Co', domain=acmesales.com, industry=COMPUTER_SOFTWARE, numberofemployees=120, hs_funding_stage='Series B', country=US.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "A lead with domain 'acmesales.com' already exists in HubSpot as a contact with email sarah.chen@acmesales.com. What is the de-dupe status for a new ingest of the same lead?",
+      "expected_output": "Status = updated. Email match found. Existing contact is patched with any new/changed fields. lifecyclestage is not downgraded. hubspot_contact_id is the existing ID.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "Map this lead that has a missing email: company='NewVenture', domain='newventure.io', contact name='Alex Park', title='CEO', no email found. Score=68.",
+      "expected_output": "Contact mapped with empty email field. lead_score=68, firstname=Alex, lastname=Park, jobtitle=CEO. Penalty for no email already reflected in score. De-dupe will attempt domain+name match. Flag for manual review.",
+      "files": []
+    }
+  ]
+}

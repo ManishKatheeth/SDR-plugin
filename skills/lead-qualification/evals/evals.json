@@ -1,0 +1,23 @@
+{
+  "skill_name": "lead-qualification",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Qualify this lead: Company: Acme Sales Co, Domain: acmesales.com, Industry: SalesTech SaaS, Employees: 120, Funding: Series B (raised 3 months ago), HQ: San Francisco, USA. Primary contact: Sarah Chen, VP of Sales, sarah.chen@acmesales.com. 5 open SDR roles posted last week.",
+      "expected_output": "Qualified (score >= 60). Top signals: SalesTech SaaS industry, 120 employees in target range, Series B funding recent, VP of Sales title, work email, 5 open SDR roles. Score likely 75+.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Qualify this lead: Company: MegaCorp Industries, Domain: megacorp.com, Industry: Manufacturing (heavy equipment), Employees: 5000, Funding: PE-backed (last round 8 years ago), HQ: Beijing, China. Primary contact: info@megacorp.com (catch-all).",
+      "expected_output": "Not qualified. Disqualifiers: China HQ (geographic mandate), employee count far outside range (5000 vs 50-500), non-SaaS industry, catch-all email. Score likely < 20.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "Qualify this lead: Company: GrowthBase, Domain: growthbase.io, Industry: MarTech, Employees: 45, Funding: Seed (raised 5 months ago), HQ: London, UK. Primary contact: James Rodriguez, Co-Founder & CEO, james@growthbase.io. No open sales roles yet.",
+      "expected_output": "Borderline / qualified (score in 55-70 range). Employee count slightly below target (45), seed stage is acceptable, UK geography matches, Co-Founder/CEO is close title. Recent seed funding adds bonus. Should land near or above 60 threshold.",
+      "files": []
+    }
+  ]
+}
