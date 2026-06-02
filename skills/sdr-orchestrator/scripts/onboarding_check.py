@@ -38,9 +38,11 @@ REQUIRED_FILES = [
     "skills/cold-email-writing/SKILL.md",
     # Skill scripts
     "skills/lead-qualification/scripts/score_leads.py",
+    "skills/crm-mapping/scripts/_config.py",
     "skills/crm-mapping/scripts/normalize_leads.py",
     "skills/crm-mapping/scripts/hubspot_upsert.py",
     "skills/crm-mapping/scripts/ensure_hubspot_setup.py",
+    "skills/crm-mapping/scripts/setup_ui.py",
     "skills/cold-email-writing/scripts/validate_email.py",
     # Reference files (User Layer, but their absence breaks a play)
     "skills/lead-qualification/references/icp-definition.md",
@@ -81,7 +83,13 @@ def plugin_root() -> Path:
 
 def check_token(root: Path) -> dict:
     """Report token presence/validity, reusing the crm-mapping bootstrap when available."""
-    present = bool(os.environ.get("HUBSPOT_PRIVATE_APP_TOKEN"))
+    # Resolve via _config so tokens saved by setup_ui.py are visible here too.
+    try:
+        sys.path.insert(0, str(root / "skills" / "crm-mapping" / "scripts"))
+        from _config import resolve_token  # noqa: PLC0415
+        present = bool(resolve_token())
+    except Exception:
+        present = bool(os.environ.get("HUBSPOT_PRIVATE_APP_TOKEN"))
     result = {"present": present, "valid": None}
 
     ensure = root / "skills" / "crm-mapping" / "scripts" / "ensure_hubspot_setup.py"
@@ -117,12 +125,13 @@ def main() -> None:
         warnings = []
         if not token["present"]:
             warnings.append(
-                "HUBSPOT_PRIVATE_APP_TOKEN is not set — /ingest-leads will run in dry-run "
-                "mode (no CRM writes). Set it to enable live HubSpot upserts."
+                "No HubSpot token found — /ingest-leads will run in dry-run mode (no CRM "
+                "writes). Run /setup-hubspot or set HUBSPOT_PRIVATE_APP_TOKEN to enable "
+                "live upserts."
             )
         elif token["valid"] is False:
             warnings.append(
-                "HUBSPOT_PRIVATE_APP_TOKEN is set but appears invalid — verify the token."
+                "HubSpot token is set but appears invalid — run /setup-hubspot to re-enter it."
             )
 
         manual_confirm = [
