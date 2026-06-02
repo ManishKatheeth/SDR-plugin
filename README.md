@@ -9,7 +9,8 @@ an audit trail.
 
 | Component | What it does |
 |---|---|
-| `sdr-orchestrator` skill | Central entry point: onboarding/setup guide, version-update guidance, and "plays" that route any SDR goal to the right command, sub-skill, and reference files. Start here. |
+| `sdr-orchestrator` skill | Central entry point: data contract, first-run onboarding preflight, a plugin inventory/index, version-update guidance, and "plays" that route any SDR goal to the right command, sub-skill, and reference files. Start here. |
+| [`DATA_CONTRACT.md`](DATA_CONTRACT.md) | Splits every file into **User Layer** (credentials, tunable references, outputs — read-only to the agent) and **System Layer** (plugin code — safe to edit). Read before changing files. |
 | `/find-leads <ICP or csv:path>` | Sources leads from Clay MCP, web scraping, or CSV; scores them against the ICP; writes `qualified-leads.json`. |
 | `/ingest-leads <file>` | Normalises, de-dupes, and upserts qualified leads into HubSpot via REST API. Dry-runs if no token is set. |
 | `/send-cold-email <email>` | Drafts a personalised, compliance-checked cold email and creates a Gmail draft for human review. |
